@@ -1,3 +1,4 @@
+// not work
 declare module 'koa-onerror' {
     export = marked;
 }

@@ -1,9 +1,9 @@
-import * as Koa from '../node_modules/@types/koa/index';
+import * as Koa from 'koa';
 const app = new Koa();
 import * as views from 'koa-views';
 import * as json from 'koa-json';
 // import * as onerror from 'koa-onerror'
-import onerror = require('koa-onerror');
+const onerror: any = require('koa-onerror');
 // import bodyParser = require('koa-bodyparser');
 import * as bodyParser from 'koa-bodyparser';
 import * as logger from 'koa-logger';
