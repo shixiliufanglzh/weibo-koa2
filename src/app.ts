@@ -2,17 +2,27 @@ import * as Koa from 'koa';
 const app = new Koa();
 import * as views from 'koa-views';
 import * as json from 'koa-json';
-// import * as onerror from 'koa-onerror'
+// import * as onerror from 'koa-onerror';
 const onerror: any = require('koa-onerror');
 import * as bodyParser from 'koa-bodyparser';
 import * as logger from 'koa-logger';
 
+import { isProd } from './utils/env';
+
+// router
 import index from './routes/index';
 import users from './routes/users';
+import errorViewRouter from './routes/view/error';
 
 
 // error handler
-onerror(app);
+let onerrorConf = {};
+if (isProd) {
+    onerrorConf = {
+        redirect: '/error',
+    };
+}
+onerror(app, onerrorConf);
 
 // middlewares
 app.use(bodyParser({
@@ -37,6 +47,7 @@ app.use(views(__dirname + '/views', {
 // routes
 app.use(index.routes()).use(index.allowedMethods());
 app.use(users.routes()).use(users.allowedMethods());
+app.use(errorViewRouter.routes()).use(errorViewRouter.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {

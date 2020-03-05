@@ -8,7 +8,8 @@
     "prd": "cross-env NODE_ENV=production pm2 start src/bin/www.ts",
     "test": "cross-env NODE_ENV=test jest --runInBand --forceExit --colors",
     "build": "tsc --watch",
-    "lint": "eslint --ext js,ts,tsx ./src"
+    "lint": "eslint --ext js,ts,tsx ./src",
+    "inspect": "nodemon --inspect=9229 dist/bin/www.js"
   },
   "dependencies": {
     "debug": "^4.1.1",
