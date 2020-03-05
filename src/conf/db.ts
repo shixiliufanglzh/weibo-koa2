@@ -1,4 +1,4 @@
-import {isDev, isProd} from '../utils/env';
+import { isDev, isProd } from '../utils/env';
 
 
 let MYSQL_CONF: any;
