@@ -1,17 +1,37 @@
 import * as Router from 'koa-router';
-import { ContextWithRender } from '../utils/extends';
+import { ExtendedContext } from '../utils/extends';
 const router = new Router();
 
-router.get('/', async (ctx: ContextWithRender, next) => {
+router.get('/', async (ctx: ExtendedContext, next) => {
     // render(viewPath: string, locals?: any): Promise<void>;
-    await ctx.render('index', {
-        title: 'Hello Koa 2!',
-    });
-    // ctx.body = 'Hello Koa 2!';
+    // await ctx.render('index', {
+    //     title: 'Hello Koa 2!',
+    //     isMe: true,
+    //     blogList: [
+    //         {
+    //             id: 1,
+    //             title: 'aaa',
+    //         },
+    //         {
+    //             id: 2,
+    //             title: 'bbb',
+    //         },
+    //         {
+    //             id: 3,
+    //             title: 'ccc',
+    //         },
+    //     ],
+    // });
+    ctx.body = 'Hello Koa 2!';
 });
 
-router.get('/string', async (ctx, next) => {
-    ctx.body = 'koa2 string';
+router.get('/string', async (ctx: ExtendedContext, next) => {
+    const session = ctx.session;
+    if (!session.viewNum) {
+        session.viewNum = 0;
+    }
+    session.viewNum += 1;
+    ctx.body = 'viewNum ' + session.viewNum;
 });
 
 router.get('/json', async (ctx, next) => {

@@ -4,16 +4,16 @@
  */
 
 import * as Router from 'koa-router';
-import { ContextWithRender } from '../../utils/extends';
+import { ExtendedContext } from '../../utils/extends';
 const router = new Router();
 
 // error
-router.get('/error', async (ctx: ContextWithRender, next) => {
+router.get('/error', async (ctx: ExtendedContext, next) => {
     await ctx.render('error');
 });
 
 // 404
-router.get('*', async (ctx: ContextWithRender, next) => {
+router.get('*', async (ctx: ExtendedContext, next) => {
     await ctx.render('404');
 });
 

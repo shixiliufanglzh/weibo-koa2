@@ -6,6 +6,9 @@ import * as json from 'koa-json';
 const onerror: any = require('koa-onerror');
 import * as bodyParser from 'koa-bodyparser';
 import * as logger from 'koa-logger';
+// import * as session from 'koa-generic-session';
+import * as session from 'koa-session';
+import * as redisStore from 'koa-redis';
 
 import { isProd } from './utils/env';
 
@@ -13,6 +16,7 @@ import { isProd } from './utils/env';
 import index from './routes/index';
 import users from './routes/users';
 import errorViewRouter from './routes/view/error';
+import { REDIS_CONF } from './conf/db';
 
 
 // error handler
@@ -36,6 +40,22 @@ app.use(views(__dirname + '/views', {
     extension: 'ejs',
 }));
 
+// session configuration
+app.keys = ['Reed@li123!@#'];
+app.use(session({
+    key: 'weibo:sess',
+    prefix: 'weibo:sid:',
+    // cookie: {
+    path: '/',
+    maxAge: 24 * 60 * 60 * 1000, // ms
+    httpOnly: true,
+    // },
+    store: redisStore({
+        host: REDIS_CONF.host,
+        port: REDIS_CONF.port,
+        // all: `${REDIS_CONF.host}:${REDIS_CONF.port}`,
+    }),
+}, app));
 // logger
 // app.use(async (ctx, next) => {
 //     const start = new Date();

@@ -1,15 +1,29 @@
+/**
+ * @description store the configuration of database
+ * @author shixiliufanglzh
+ */
+
 import { isDev, isProd } from '../utils/env';
 
 
-let MYSQL_CONF: any;
-let REDIS_CONF: any;
+let MYSQL_CONF: {
+    host: string,
+    user: string,
+    password: string,
+    port: number,
+    database: string,
+};
+let REDIS_CONF: {
+    port: number,
+    host: string,
+};
 
 if (isDev) {
     MYSQL_CONF = {
         host: 'localhost',
         user: 'root',
         password: '123456',
-        port: '3306',
+        port: 3306,
         database: 'weibo',
     };
     REDIS_CONF = {
@@ -21,7 +35,7 @@ if (isDev) {
         host: 'localhost',
         user: 'root',
         password: '123456',
-        port: '3306',
+        port: 3306,
         database: 'weibo',
     };
     REDIS_CONF = {
@@ -33,7 +47,7 @@ if (isDev) {
         host: 'localhost',
         user: 'root',
         password: '123456',
-        port: '3306',
+        port: 3306,
         database: 'weibo',
     };
     REDIS_CONF = {
