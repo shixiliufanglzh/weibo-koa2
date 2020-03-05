@@ -3,13 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node bin/www",
-    "dev": "cross-env NODE_ENV=dev ./node_modules/.bin/nodemon src/bin/www",
-    "prd": "cross-env NODE_ENV=production pm2 start bin/www",
+    "start": "node src/bin/www",
+    "dev": "cross-env NODE_ENV=dev ./node_modules/.bin/nodemon src/bin/www.ts",
+    "prd": "cross-env NODE_ENV=production pm2 start src/bin/www.ts",
     "test": "cross-env NODE_ENV=test jest --runInBand --forceExit --colors",
-    "watch-serve": "cross-env NODE_ENV=dev ./node_modules/.bin/nodemon --watch './src/**/*' --ext ts,tsx  --exec ts-node  bin/www",
-    "tsdev": "tsc --watch & export NODE_ENV=dev && node bin/dev.js -t dist/ -e dist/app.js",
-    "rldev": "cross-env NODE_ENV=dev ./node_modules/.bin/nodemon bin/www --watch './src/**/*'"
+    "build": "tsc --watch"
   },
   "dependencies": {
     "debug": "^4.1.1",

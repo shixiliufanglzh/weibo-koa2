@@ -4,7 +4,6 @@ import * as views from 'koa-views';
 import * as json from 'koa-json';
 // import * as onerror from 'koa-onerror'
 const onerror: any = require('koa-onerror');
-// import bodyParser = require('koa-bodyparser');
 import * as bodyParser from 'koa-bodyparser';
 import * as logger from 'koa-logger';
 

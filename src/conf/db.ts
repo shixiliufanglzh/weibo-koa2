@@ -42,7 +42,7 @@ if (isDev) {
     };
 }
 
-export default {
+export {
     MYSQL_CONF,
     REDIS_CONF,
 };

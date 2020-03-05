@@ -1,11 +1,13 @@
 import * as Router from 'koa-router';
+import { ContextWithRender } from '../utils/extends';
 const router = new Router();
 
-router.get('/', async (ctx, next) => {
-    // await ctx.render('index', {
-    //     title: 'Hello Koa 2!',
-    // });
-    ctx.body = 'Hello Koa 2!';
+router.get('/', async (ctx: ContextWithRender, next) => {
+    // render(viewPath: string, locals?: any): Promise<void>;
+    await ctx.render('index', {
+        title: 'Hello Koa 2!',
+    });
+    // ctx.body = 'Hello Koa 2!';
 });
 
 router.get('/string', async (ctx, next) => {
@@ -13,13 +15,11 @@ router.get('/string', async (ctx, next) => {
 });
 
 router.get('/json', async (ctx, next) => {
-    ctx.body = {
-        title: 'koa2 json',
-    };
+    ctx.body = { title: 'koa2 json' };
 });
 
 router.get('/profile/:userName', function (ctx, next) {
-    const {userName} = ctx.params;
+    const { userName } = ctx.params;
     ctx.body = {
         title: 'this is profile page',
         userName,

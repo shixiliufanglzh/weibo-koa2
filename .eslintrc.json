@@ -23,6 +23,8 @@
         "indent": ["error", 4, {
             "SwitchCase": 1
         }],
-        "space-before-function-paren": ["error", "always"]
+        "space-before-function-paren": ["error", "always"],
+        "object-curly-spacing": ["warn", "always"],
+        "no-unused-vars": 0
     }
 }
