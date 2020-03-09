@@ -1,9 +1,10 @@
 /**
  * @description sequelize instance
  */
-import { Sequelize, Options } from 'sequelize';
 import { isProd, isTest } from '../utils/env';
 import { MYSQL_CONF } from '../conf/db';
+import { Sequelize } from 'sequelize';
+import { Options } from 'sequelize/types';
 
 const { host, user, password, database } = MYSQL_CONF;
 
@@ -24,6 +25,4 @@ if (isTest) {
     conf.logging = () => { };
 }
 
-const seq = new Sequelize(database, user, password, conf);
-
-export default seq;
+export default new Sequelize(database, user, password, conf);

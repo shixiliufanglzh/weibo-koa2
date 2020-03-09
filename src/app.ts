@@ -15,6 +15,7 @@ import { isProd } from './utils/env';
 // router
 import index from './routes/index';
 import userView from './routes/view/user';
+import userApi from './routes/api/user';
 import errorViewRouter from './routes/view/error';
 import { REDIS_CONF } from './conf/db';
 
@@ -67,6 +68,7 @@ app.use(session({
 // routes
 app.use(index.routes()).use(index.allowedMethods());
 app.use(userView.routes()).use(userView.allowedMethods());
+app.use(userApi.routes()).use(userApi.allowedMethods());
 app.use(errorViewRouter.routes()).use(errorViewRouter.allowedMethods());
 
 // error-handling

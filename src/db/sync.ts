@@ -3,8 +3,7 @@
 */
 
 import seq from './seq';
-
-// require('../model')
+import './model/index';
 
 // test connection
 seq.authenticate().then(() => {
