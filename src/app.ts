@@ -18,6 +18,7 @@ import userView from './routes/view/user';
 import userApi from './routes/api/user';
 import errorViewRouter from './routes/view/error';
 import { REDIS_CONF } from './conf/db';
+import { SESSION_SECRET_KEY } from './conf/secretKeys';
 
 
 // error handler
@@ -42,7 +43,7 @@ app.use(views(__dirname + '/views', {
 }));
 
 // session configuration
-app.keys = ['Reed@li123!@#'];
+app.keys = [SESSION_SECRET_KEY];
 app.use(session({
     key: 'weibo:sess',
     prefix: 'weibo:sid:',

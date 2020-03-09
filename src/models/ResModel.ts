@@ -9,7 +9,7 @@ export interface IErrResData {
     message: string;
 }
 
-class BaseModel {
+export class BaseModel {
     errno: number;
     data: any;
     message: string;
@@ -21,7 +21,7 @@ class BaseModel {
 }
 
 export class SuccessModel extends BaseModel {
-    constructor(data: any) {
+    constructor(data?: any) {
         super({ errno: 0, data, message: '' });
     }
 }
