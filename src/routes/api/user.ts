@@ -4,7 +4,7 @@
 
 import * as Router from 'koa-router';
 import { ExtendedContext } from '../../utils/extends';
-import { isExist, register } from '../../controllers/user';
+import { isExist, register, login } from '../../controllers/user';
 import { genValidator } from '../../middlewares/validator';
 import userValidate from '../../validators/user';
 const router = new Router();
@@ -17,6 +17,15 @@ router.post(
     async (ctx: ExtendedContext, next) => {
         const { userName, password, gender } = ctx.request.body;
         ctx.body = await register({ userName, password, gender });
+    },
+);
+
+router.post(
+    '/login',
+    // genValidator(userValidate),
+    async (ctx: ExtendedContext, next) => {
+        const { userName, password } = ctx.request.body;
+        ctx.body = await login(ctx, userName, password);
     },
 );
 

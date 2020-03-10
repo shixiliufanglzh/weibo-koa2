@@ -5,6 +5,7 @@ import { getUserInfo, createUser } from '../services/user';
 import { BaseModel, SuccessModel, ErrorModel } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
 import doCrypto from '../utils/cryp';
+import { ExtendedContext } from '../utils/extends';
 
 /**
  * @description judge if this user exist
@@ -28,7 +29,7 @@ export async function isExist(userName: string): Promise<BaseModel> {
  * }} { userName, password, gender }
  * @return {Promise<BaseModel>}
  */
-export async function register({userName, password, gender }:{
+export async function register({ userName, password, gender }: {
     userName: string,
     password: string,
     gender: number
@@ -48,4 +49,26 @@ export async function register({userName, password, gender }:{
         console.error(error.message, error.stack);
         return new ErrorModel(apiErrInfo.registerFail);
     }
+}
+
+/**
+ * login api
+ * @param {ExtendedContext} ctx
+ * @param {string} userName
+ * @param {string} password
+ * @return {Promise<BaseModel>}
+ */
+export async function login(
+    ctx: ExtendedContext,
+    userName: string,
+    password: string,
+): Promise<BaseModel> {
+    const userInfo = await getUserInfo(userName, doCrypto(password));
+    if (!userInfo) {
+        return new ErrorModel(apiErrInfo.loginFail);
+    }
+    if (!ctx.session.userInfo) {
+        ctx.session.userInfo = userInfo;
+    }
+    return new SuccessModel(userInfo);
 }
