@@ -45,7 +45,7 @@ export const apiErrInfo = {
         message: '修改基本信息失败',
     },
     // json schema 校验失败
-    jsonSchemaFile: {
+    jsonSchemaFail: {
         errno: 10009,
         message: '数据格式校验错误',
     },
