@@ -1,8 +1,9 @@
 import * as Router from 'koa-router';
 import { ExtendedContext } from '../utils/extends';
+import { loginRedirect, loginCheck } from '../middlewares/loginChecks';
 const router = new Router();
 
-router.get('/', async (ctx: ExtendedContext, next) => {
+router.get('/', loginRedirect, async (ctx: ExtendedContext, next) => {
     // render(viewPath: string, locals?: any): Promise<void>;
     // await ctx.render('index', {
     //     title: 'Hello Koa 2!',
@@ -34,7 +35,7 @@ router.get('/string', async (ctx: ExtendedContext, next) => {
     ctx.body = 'viewNum ' + session.viewNum;
 });
 
-router.get('/json', async (ctx, next) => {
+router.get('/json', loginCheck, async (ctx, next) => {
     ctx.body = { title: 'koa2 json' };
 });
 
