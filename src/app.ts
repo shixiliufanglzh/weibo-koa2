@@ -2,8 +2,10 @@ import * as Koa from 'koa';
 const app = new Koa();
 import * as views from 'koa-views';
 import * as json from 'koa-json';
+import * as koaStatic from 'koa-static';
 // import * as onerror from 'koa-onerror';
 const onerror: any = require('koa-onerror');
+import { join } from 'path';
 import * as bodyParser from 'koa-bodyparser';
 import * as logger from 'koa-logger';
 // import * as session from 'koa-generic-session';
@@ -12,13 +14,15 @@ import * as redisStore from 'koa-redis';
 
 import { isProd } from './utils/env';
 
+// configuration
+import { REDIS_CONF } from './conf/db';
+import { SESSION_SECRET_KEY } from './conf/secretKeys';
 // router
 import index from './routes/index';
 import userView from './routes/view/user';
 import userApi from './routes/api/user';
+import utilsApi from './routes/api/utils';
 import errorViewRouter from './routes/view/error';
-import { REDIS_CONF } from './conf/db';
-import { SESSION_SECRET_KEY } from './conf/secretKeys';
 
 
 // error handler
@@ -36,7 +40,8 @@ app.use(bodyParser({
 }));
 app.use(json());
 app.use(logger());
-app.use(require('koa-static')(__dirname + '/public'));
+app.use(koaStatic(__dirname + '/public'));
+app.use(koaStatic(join(__dirname, '../uploadFiles')));
 
 app.use(views(__dirname + '/views', {
     extension: 'ejs',
@@ -70,6 +75,7 @@ app.use(session({
 app.use(index.routes()).use(index.allowedMethods());
 app.use(userView.routes()).use(userView.allowedMethods());
 app.use(userApi.routes()).use(userApi.allowedMethods());
+app.use(utilsApi.routes()).use(utilsApi.allowedMethods());
 app.use(errorViewRouter.routes()).use(errorViewRouter.allowedMethods());
 
 // error-handling
