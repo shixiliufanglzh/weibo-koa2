@@ -60,3 +60,12 @@ export async function createUser({
     }
     return result.get() as IUser;
 }
+
+export async function deleteUser(userName: string): Promise<boolean> {
+    const result = await DefinedUser.destroy({
+        where: {
+            userName,
+        },
+    });
+    return result > 0;
+}

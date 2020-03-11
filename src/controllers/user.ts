@@ -1,7 +1,7 @@
 /**
  * @description user controller
  */
-import { getUserInfo, createUser } from '../services/user';
+import { getUserInfo, createUser, deleteUser } from '../services/user';
 import { BaseModel, SuccessModel, ErrorModel } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
 import doCrypto from '../utils/cryp';
@@ -71,4 +71,12 @@ export async function login(
         ctx.session.userInfo = userInfo;
     }
     return new SuccessModel(userInfo);
+}
+
+export async function deleteCurUser(userName: string): Promise<BaseModel> {
+    const result = await deleteUser(userName);
+    if (result) {
+        return new SuccessModel();
+    }
+    return new ErrorModel(apiErrInfo.deleteUserFail);
 }

@@ -4,9 +4,13 @@
 
 import * as Router from 'koa-router';
 import { ExtendedContext } from '../../utils/extends';
-import { isExist, register, login } from '../../controllers/user';
+import {
+    isExist, register, login, deleteCurUser,
+} from '../../controllers/user';
 import { genValidator } from '../../middlewares/validator';
 import userValidate from '../../validators/user';
+import { isTest } from '../../utils/env';
+import { loginCheck } from '../../middlewares/loginChecks';
 const router = new Router();
 
 router.prefix('/api/user');
@@ -22,10 +26,21 @@ router.post(
 
 router.post(
     '/login',
-    // genValidator(userValidate),
     async (ctx: ExtendedContext, next) => {
         const { userName, password } = ctx.request.body;
         ctx.body = await login(ctx, userName, password);
+    },
+);
+
+router.post(
+    '/delete',
+    loginCheck,
+    async (ctx: ExtendedContext, next) => {
+        if (isTest) {
+            // test env - delete test account
+            const { userName } = ctx.session.userInfo;
+            ctx.body = await deleteCurUser(userName);
+        }
     },
 );
 
