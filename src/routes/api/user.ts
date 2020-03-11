@@ -5,7 +5,7 @@
 import * as Router from 'koa-router';
 import { ExtendedContext } from '../../utils/extends';
 import {
-    isExist, register, login, deleteCurUser, changeInfo,
+    isExist, register, login, deleteCurUser, changeInfo, changePassword, logout,
 } from '../../controllers/user';
 import { genValidator } from '../../middlewares/validator';
 import userValidate from '../../validators/user';
@@ -58,6 +58,28 @@ router.patch(
         ctx.body = await changeInfo(ctx, {
             nickName, picture, city,
         });
+    },
+);
+
+router.patch(
+    '/changePassword',
+    loginCheck,
+    genValidator(userValidate),
+    async (ctx: ExtendedContext, next) => {
+        const { password, newPassword } = ctx.request.body;
+        ctx.body = await changePassword(
+            ctx.session.userInfo.userName,
+            password,
+            newPassword,
+        );
+    },
+);
+
+router.post(
+    '/logout',
+    loginCheck,
+    async (ctx: ExtendedContext, next) => {
+        ctx.body = await logout(ctx);
     },
 );
 

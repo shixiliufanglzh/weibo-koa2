@@ -1,7 +1,9 @@
 /**
  * @description user controller
  */
-import { getUserInfo, createUser, deleteUser, updateUser } from '../services/user';
+import {
+    getUserInfo, createUser, deleteUser, updateUser,
+} from '../services/user';
 import { BaseModel, SuccessModel, ErrorModel } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
 import doCrypto from '../utils/cryp';
@@ -113,4 +115,33 @@ export async function changeInfo(
         return new SuccessModel();
     }
     return new ErrorModel(apiErrInfo.changeInfoFail);
+}
+
+/**
+ * change user infomation
+ * @param {string} userName
+ * @param {string} password
+ * @param {string} newPassword
+ * @return {Promise<BaseModel>}
+ */
+export async function changePassword(
+    userName: string,
+    password: string,
+    newPassword: string,
+): Promise<BaseModel> {
+    const result = await updateUser({
+        password: doCrypto(newPassword),
+    }, {
+        userName,
+        password: doCrypto(password),
+    });
+    if (result) {
+        return new SuccessModel();
+    }
+    return new ErrorModel(apiErrInfo.changePasswordFail);
+}
+
+export async function logout(ctx: ExtendedContext): Promise<BaseModel> {
+    delete ctx.session.userInfo;
+    return new SuccessModel();
 }
