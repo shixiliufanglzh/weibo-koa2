@@ -1,7 +1,7 @@
 /**
  * @description user controller
  */
-import { getUserInfo, createUser, deleteUser } from '../services/user';
+import { getUserInfo, createUser, deleteUser, updateUser } from '../services/user';
 import { BaseModel, SuccessModel, ErrorModel } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
 import doCrypto from '../utils/cryp';
@@ -79,4 +79,38 @@ export async function deleteCurUser(userName: string): Promise<BaseModel> {
         return new SuccessModel();
     }
     return new ErrorModel(apiErrInfo.deleteUserFail);
+}
+
+/**
+ * change user infomation
+ * @param {ExtendedContext} ctx
+ * @param {string} nickName
+ * @param {string} picture
+ * @param {string} city
+ * @return {Promise<BaseModel>}
+ */
+export async function changeInfo(
+    ctx: ExtendedContext,
+    { nickName, picture, city }: { [key: string]: string },
+): Promise<BaseModel> {
+    const { userName } = ctx.session.userInfo;
+    if (!nickName) {
+        nickName = userName;
+    }
+    const result = await updateUser({
+        nickName,
+        picture,
+        city,
+    }, {
+        userName,
+    });
+    if (result) {
+        Object.assign(ctx.session.userInfo, {
+            nickName,
+            picture,
+            city,
+        });
+        return new SuccessModel();
+    }
+    return new ErrorModel(apiErrInfo.changeInfoFail);
 }

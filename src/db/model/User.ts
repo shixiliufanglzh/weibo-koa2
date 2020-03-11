@@ -4,10 +4,10 @@ import seq from '../seq';
 export interface IUser {
     userName: string;
     password: string;
-    nickName: string;
+    nickName?: string;
     gender: number;
-    picture: string;
-    city: string;
+    picture?: string;
+    city?: string;
 }
 
 export interface UserModel extends IUser, Model {};

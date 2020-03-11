@@ -29,12 +29,7 @@ export async function getUserInfo(
 
 /**
  * create user
- * @param {{
- *     userName: string,
- *     password: string,
- *     gender: number,
- *     nickName: string
- * }} user (`userName, password, gender, nickName`)
+ * @param {IUSER} user (`userName, password, gender, nickName`)
  * @return {Promise}
  */
 export async function createUser({
@@ -42,12 +37,7 @@ export async function createUser({
     password,
     gender,
     nickName,
-}: {
-    userName: string,
-    password: string,
-    gender?: number,
-    nickName?: string
-}): Promise<IUser> {
+}: IUser): Promise<IUser> {
     const result = await DefinedUser.create({
         userName,
         password,
@@ -68,4 +58,51 @@ export async function deleteUser(userName: string): Promise<boolean> {
         },
     });
     return result > 0;
+}
+
+/**
+ * update user information
+ * @param {IUserInfoToUpdated} userInfoToUpdated
+ * @param {IUserInfoForAuth} userInfoForAuth
+ * @return {Promise<boolean>}
+ */
+export async function updateUser(
+    userInfoToUpdated: IUserInfoToUpdated,
+    userInfoForAuth: IUserInfoForAuth,
+): Promise<boolean> {
+    const updateData: IUserInfoToUpdated = {};
+    if (userInfoToUpdated.password) {
+        updateData.password = userInfoToUpdated.password;
+    }
+    if (userInfoToUpdated.nickName) {
+        updateData.nickName = userInfoToUpdated.nickName;
+    }
+    if (userInfoToUpdated.picture) {
+        updateData.picture = userInfoToUpdated.picture;
+    }
+    if (userInfoToUpdated.city) {
+        updateData.city = userInfoToUpdated.city;
+    }
+    const whereData: any = {
+        userName: userInfoForAuth.userName,
+    };
+    if (userInfoForAuth.password) {
+        whereData.password = userInfoForAuth.password;
+    }
+    const result = await DefinedUser.update(updateData, {
+        where: whereData,
+    });
+    return result[0] > 0;
+}
+
+interface IUserInfoForAuth {
+    userName: string,
+    password?: string,
+}
+
+interface IUserInfoToUpdated {
+    password?: string,
+    nickName?: string,
+    picture?: string,
+    city?: string,
 }
