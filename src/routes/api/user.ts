@@ -45,8 +45,8 @@ router.post(
 );
 
 router.post('/isExist', async (ctx: ExtendedContext, next) => {
-    const { nickName, picture, city } = ctx.request.body;
-    ctx.body = await changeInfo(ctx, { nickName, picture, city });
+    const { userName } = ctx.request.body;
+    ctx.body = await isExist(userName);
 });
 
 router.patch(

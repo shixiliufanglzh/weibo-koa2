@@ -64,10 +64,44 @@ test('login test', async () => {
     COOKIE = res.header['set-cookie'].join(';')
 })
 
+// change base info
+test('change info test', async () => {
+    const res = await server
+        .patch('/api/user/changeInfo')
+        .send({
+            userName: 'test_name',
+            picture: '/xxx.png',
+            city: 'shanghai or beijing'
+        })
+        .set('cookie', COOKIE);
+    expect(res.body.errno).toBe(0);
+})
+
+// change password
+test('change password', async () => {
+    const res = await server
+        .patch('/api/user/changePassword')
+        .send({
+            userName: 'test_name',
+            password: testUser.password,
+            newPassword: `p_${Date.now()}`,
+        })
+        .set('cookie', COOKIE);
+    expect(res.body.errno).toBe(0);
+})
+
 // test delete user
 test('delete user test', async () => {
     const res = await server
         .post('/api/user/delete')
+        .set('cookie', COOKIE);
+    expect(res.body.errno).toBe(0);
+})
+
+// log out
+test('log out test', async () => {
+    const res = await server
+        .post('/api/user/logout')
         .set('cookie', COOKIE);
     expect(res.body.errno).toBe(0);
 })
