@@ -1,4 +1,4 @@
-import { Model, BuildOptions, STRING, DECIMAL } from 'sequelize';
+import { Model, BuildOptions, STRING, TINYINT } from 'sequelize';
 import seq from '../seq';
 
 export interface IUser {
@@ -33,7 +33,7 @@ export const DefinedUser = <UserModelStatic>seq.define('user', {
         allowNull: false,
     },
     gender: {
-        type: DECIMAL,
+        type: TINYINT,
         allowNull: false,
         defaultValue: 3,
         comment: 'gender: 1-male, 2-female, 3-secret',
