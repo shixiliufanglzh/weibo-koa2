@@ -3,28 +3,28 @@ import { ExtendedContext } from '../utils/extends';
 import { loginRedirect, loginCheck } from '../middlewares/loginChecks';
 const router = new Router();
 
-router.get('/', loginRedirect, async (ctx: ExtendedContext, next) => {
-    // render(viewPath: string, locals?: any): Promise<void>;
-    // await ctx.render('index', {
-    //     title: 'Hello Koa 2!',
-    //     isMe: true,
-    //     blogList: [
-    //         {
-    //             id: 1,
-    //             title: 'aaa',
-    //         },
-    //         {
-    //             id: 2,
-    //             title: 'bbb',
-    //         },
-    //         {
-    //             id: 3,
-    //             title: 'ccc',
-    //         },
-    //     ],
-    // });
-    ctx.body = 'Hello Koa 2!';
-});
+// router.get('/', loginRedirect, async (ctx: ExtendedContext, next) => {
+//     // render(viewPath: string, locals?: any): Promise<void>;
+//     // await ctx.render('index', {
+//     //     title: 'Hello Koa 2!',
+//     //     isMe: true,
+//     //     blogList: [
+//     //         {
+//     //             id: 1,
+//     //             title: 'aaa',
+//     //         },
+//     //         {
+//     //             id: 2,
+//     //             title: 'bbb',
+//     //         },
+//     //         {
+//     //             id: 3,
+//     //             title: 'ccc',
+//     //         },
+//     //     ],
+//     // });
+//     ctx.body = 'Hello Koa 2!';
+// });
 
 router.get('/string', async (ctx: ExtendedContext, next) => {
     const session = ctx.session;
