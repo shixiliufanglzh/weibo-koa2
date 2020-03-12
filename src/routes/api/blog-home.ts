@@ -8,7 +8,7 @@ import {
     isExist, register, login, deleteCurUser, changeInfo, changePassword, logout,
 } from '../../controllers/user';
 import { genValidator } from '../../middlewares/validator';
-import userValidate from '../../validators/user';
+import blogValidate from '../../validators/blog';
 import { isTest } from '../../utils/env';
 import { loginCheck } from '../../middlewares/loginChecks';
 import { create } from '../../controllers/blog-home';
@@ -19,6 +19,7 @@ router.prefix('/api/blog');
 router.post(
     '/create',
     loginCheck,
+    genValidator(blogValidate),
     async (ctx: ExtendedContext, next) => {
         const { content, image } = ctx.request.body;
         const { id } = ctx.session.userInfo;

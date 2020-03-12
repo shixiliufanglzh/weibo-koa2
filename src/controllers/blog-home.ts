@@ -1,13 +1,9 @@
 /**
  * @description user controller
  */
-import {
-    getUserInfo, createUser, deleteUser, updateUser,
-} from '../services/user';
+import { filterXSS } from 'xss';
 import { BaseModel, SuccessModel, ErrorModel } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
-import doCrypto from '../utils/cryp';
-import { ExtendedContext } from '../utils/extends';
 import { createBlog } from '../services/blog';
 
 /**
@@ -25,7 +21,7 @@ export async function create(
     try {
         const blog = await createBlog({
             userId,
-            content,
+            content: filterXSS(content),
             image,
         });
         return new SuccessModel(blog);

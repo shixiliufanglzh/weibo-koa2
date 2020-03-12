@@ -1,5 +1,5 @@
 /**
- * @description 微博 数据格式校验
+ * @description blog data format checker
  */
 
 import * as Ajv from 'ajv';
@@ -24,8 +24,6 @@ const SCHEMA = {
  * @param {Object} data 微博数据
  * @return {Ajv.ErrorObject}
  */
-function blogValidate(data: any = {}): Ajv.ErrorObject {
+export default function blogValidate(data: any = {}): Ajv.ErrorObject {
     return validate(SCHEMA, data);
 }
-
-module.exports = blogValidate;
