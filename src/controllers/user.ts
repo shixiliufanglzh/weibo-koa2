@@ -41,12 +41,12 @@ export async function register({ userName, password, gender }: {
         return new ErrorModel(apiErrInfo.registerUserNameExist);
     }
     try {
-        await createUser({
+        const user = await createUser({
             userName,
             password: doCrypto(password),
             gender,
         });
-        return new SuccessModel();
+        return new SuccessModel(user);
     } catch (error) {
         console.error(error.message, error.stack);
         return new ErrorModel(apiErrInfo.registerFail);
