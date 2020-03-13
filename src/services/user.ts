@@ -44,7 +44,7 @@ export async function createUser({
         gender: gender || 3,
         nickName: nickName || userName,
     });
-    console.log(result);
+    // console.log(result);
     if (!result) {
         return result;
     }

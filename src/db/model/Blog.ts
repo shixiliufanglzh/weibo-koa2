@@ -5,6 +5,9 @@ export interface IBlog {
     userId: number;
     content: string;
     image: string;
+    createdAtFormat?: string;
+    updatedAtFormat?: string;
+    contentFormat?: string;
 }
 
 export interface BlogModel extends IBlog, Model {};

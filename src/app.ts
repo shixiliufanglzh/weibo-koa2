@@ -23,6 +23,7 @@ import userView from './routes/view/user';
 import userApi from './routes/api/user';
 import blogView from './routes/view/blog';
 import blogHomeApi from './routes/api/blog-home';
+import blogProfileApi from './routes/api/blog-profile';
 import utilsApi from './routes/api/utils';
 import errorViewRouter from './routes/view/error';
 
@@ -79,6 +80,7 @@ app.use(userView.routes()).use(userView.allowedMethods());
 app.use(userApi.routes()).use(userApi.allowedMethods());
 app.use(blogView.routes()).use(blogView.allowedMethods());
 app.use(blogHomeApi.routes()).use(blogHomeApi.allowedMethods());
+app.use(blogProfileApi.routes()).use(blogProfileApi.allowedMethods());
 app.use(utilsApi.routes()).use(utilsApi.allowedMethods());
 app.use(errorViewRouter.routes()).use(errorViewRouter.allowedMethods());
 

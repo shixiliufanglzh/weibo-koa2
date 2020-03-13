@@ -39,12 +39,4 @@ router.get('/json', loginCheck, async (ctx, next) => {
     ctx.body = { title: 'koa2 json' };
 });
 
-router.get('/profile/:userName', function(ctx, next) {
-    const { userName } = ctx.params;
-    ctx.body = {
-        title: 'this is profile page',
-        userName,
-    };
-});
-
 export default router;
