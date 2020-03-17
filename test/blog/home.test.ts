@@ -69,6 +69,20 @@ test('test blog creation', async () => {
     expect(res.body.data.image).toBe(testBlog.image);
 })
 
+// test create blog
+test('load first page of blogs in profile', async () => {
+    const res = await server
+        .get(`/api/profile/loadMore/${testUser.userName}/0`)
+        .set('cookie', COOKIE);
+    expect(res.body.errno).toBe(0);
+    const data = res.body.data;
+    expect(data).toHaveProperty('isEmpty');
+    expect(data).toHaveProperty('count');
+    expect(data).toHaveProperty('pageSize');
+    expect(data).toHaveProperty('pageIndex');
+    expect(data).toHaveProperty('blogList');
+})
+
 // test delete user
 // test('delete user test', async () => {
 //     const res = await server
