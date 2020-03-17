@@ -8,7 +8,7 @@ DefinedBlog.belongsTo(DefinedUser, {
     foreignKey: 'userId',
 });
 DefinedUser.hasMany(DefinedUserRelation, {
-    foreignKey: 'follower',
+    foreignKey: 'followerId',
 });
 DefinedUserRelation.belongsTo(DefinedUser, {
     foreignKey: 'userId',

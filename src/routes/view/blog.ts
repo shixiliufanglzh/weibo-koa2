@@ -4,10 +4,13 @@
 
 import * as Router from 'koa-router';
 import { ExtendedContext } from '../../utils/extends';
+import { IResData } from '../../models/ResModel';
 import { loginRedirect } from '../../middlewares/loginChecks';
 import { getProfileBlogs } from '../../controllers/blog-profile';
 import { isExist } from '../../controllers/user';
 import { getSquareBlogs } from '../../controllers/blog-square';
+import { IUser, IBlog } from '../../db/model';
+import { getFans } from '../../controllers/user-relation';
 const router = new Router();
 
 router.get('/', loginRedirect, async (ctx: ExtendedContext, next) => {
@@ -23,28 +26,34 @@ router.get(
     '/profile/:userName',
     loginRedirect,
     async (ctx: ExtendedContext, next) => {
-        const myUserInfo = ctx.session.userInfo;
-        const myUserName = myUserInfo.userName;
-
-        let curUserInfo;
+        const myUserInfo: IUser = ctx.session.userInfo;
+        const myUserName: string = myUserInfo.userName;
+        // 1.get current user info
+        let curUserInfo: IUser;
         const { userName: curUserName } = ctx.params;
         const isMe = myUserName === curUserName;
         if (isMe) {
             curUserInfo = myUserInfo;
         } else {
-            const existResult = await isExist(curUserName);
+            const existResult: IResData<IUser> = await isExist(curUserName);
             if (existResult.errno !== 0) {
                 return;
             }
             curUserInfo = existResult.data;
         }
-        const result = await getProfileBlogs(curUserName, 0);
+        // 2.get blogs of current user
+        const blogResult: IResData<IBlog> =
+            await getProfileBlogs(curUserName, 0);
+        // 3.get fans data
+        const fansResult = await getFans(curUserInfo.id);
+        // render data
         await ctx.render('profile', {
-            blogData: result.data,
             userData: {
                 userInfo: curUserInfo,
                 isMe,
+                fansData: fansResult.data,
             },
+            blogData: blogResult.data,
         });
     },
 );

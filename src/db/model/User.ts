@@ -2,6 +2,7 @@ import { Model, BuildOptions, STRING, TINYINT } from 'sequelize';
 import seq from '../seq';
 
 export interface IUser {
+    id?: number;
     userName: string;
     password: string;
     nickName?: string;

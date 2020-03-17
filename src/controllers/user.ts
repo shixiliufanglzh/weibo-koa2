@@ -4,17 +4,20 @@
 import {
     getUserInfo, createUser, deleteUser, updateUser,
 } from '../services/user';
-import { BaseModel, SuccessModel, ErrorModel } from '../models/ResModel';
+import { SuccessModel, ErrorModel, IResData } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
 import doCrypto from '../utils/cryp';
 import { ExtendedContext } from '../utils/extends';
+import { IUser } from '../db/model';
 
 /**
  * @description judge if this user exist
  * @param {string} userName
  */
-export async function isExist(userName: string): Promise<BaseModel> {
-    const userInfo = await getUserInfo(userName);
+export async function isExist(
+    userName: string,
+): Promise<IResData<IUser | null>> {
+    const userInfo: IUser = await getUserInfo(userName);
     if (userInfo) {
         return new SuccessModel(userInfo);
     } else {
@@ -29,19 +32,19 @@ export async function isExist(userName: string): Promise<BaseModel> {
  *     password: string,
  *     gender: number
  * }} { userName, password, gender }
- * @return {Promise<BaseModel>}
+ * @return {Promise<IResData<IUser| null>>}
  */
 export async function register({ userName, password, gender }: {
     userName: string,
     password: string,
     gender: number
-}): Promise<BaseModel> {
+}): Promise<IResData<IUser | null>> {
     const userInfo = await getUserInfo(userName);
     if (userInfo) {
         return new ErrorModel(apiErrInfo.registerUserNameExist);
     }
     try {
-        const user = await createUser({
+        const user: IUser = await createUser({
             userName,
             password: doCrypto(password),
             gender,
@@ -58,13 +61,13 @@ export async function register({ userName, password, gender }: {
  * @param {ExtendedContext} ctx
  * @param {string} userName
  * @param {string} password
- * @return {Promise<BaseModel>}
+ * @return {Promise<IResData<IUser| null>>}
  */
 export async function login(
     ctx: ExtendedContext,
     userName: string,
     password: string,
-): Promise<BaseModel> {
+): Promise<IResData<IUser | null>> {
     const userInfo = await getUserInfo(userName, doCrypto(password));
     if (!userInfo) {
         return new ErrorModel(apiErrInfo.loginFail);
@@ -75,7 +78,7 @@ export async function login(
     return new SuccessModel(userInfo);
 }
 
-export async function deleteCurUser(userName: string): Promise<BaseModel> {
+export async function deleteCurUser(userName: string): Promise<IResData<any>> {
     const result = await deleteUser(userName);
     if (result) {
         return new SuccessModel();
@@ -89,12 +92,12 @@ export async function deleteCurUser(userName: string): Promise<BaseModel> {
  * @param {string} nickName
  * @param {string} picture
  * @param {string} city
- * @return {Promise<BaseModel>}
+ * @return {Promise<IResData<IUser| null>>}
  */
 export async function changeInfo(
     ctx: ExtendedContext,
     { nickName, picture, city }: { [key: string]: string },
-): Promise<BaseModel> {
+): Promise<IResData<IUser | null>> {
     const { userName } = ctx.session.userInfo;
     if (!nickName) {
         nickName = userName;
@@ -122,13 +125,13 @@ export async function changeInfo(
  * @param {string} userName
  * @param {string} password
  * @param {string} newPassword
- * @return {Promise<BaseModel>}
+ * @return {Promise<IResData<any>>}
  */
 export async function changePassword(
     userName: string,
     password: string,
     newPassword: string,
-): Promise<BaseModel> {
+): Promise<IResData<any>> {
     const result = await updateUser({
         password: doCrypto(newPassword),
     }, {
@@ -141,7 +144,7 @@ export async function changePassword(
     return new ErrorModel(apiErrInfo.changePasswordFail);
 }
 
-export async function logout(ctx: ExtendedContext): Promise<BaseModel> {
+export async function logout(ctx: ExtendedContext): Promise<IResData<any>> {
     delete ctx.session.userInfo;
     return new SuccessModel();
 }

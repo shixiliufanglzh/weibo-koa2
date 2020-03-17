@@ -12,7 +12,7 @@ import { formatUser } from './_format';
 export async function getUserInfo(
     userName: string,
     password?: string,
-): Promise<IUser | IUser[]> {
+): Promise<IUser> {
     const whereOpt = { userName };
     if (password) {
         Object.assign(whereOpt, { password });

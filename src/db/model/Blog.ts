@@ -2,6 +2,7 @@ import { Model, BuildOptions, STRING, DECIMAL, INTEGER, TEXT } from 'sequelize';
 import seq from '../seq';
 
 export interface IBlog {
+    id?: number;
     userId: number;
     content: string;
     image: string;

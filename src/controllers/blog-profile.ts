@@ -1,8 +1,8 @@
 /**
- * @description user controller
+ * @description user blog profile controller
  */
 import { filterXSS } from 'xss';
-import { BaseModel, SuccessModel, ErrorModel } from '../models/ResModel';
+import { SuccessModel, ErrorModel, IResData } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
 import { getBlogsByUser } from '../services/blog';
 import { PAGE_SIZE } from '../conf/constants';
@@ -13,12 +13,12 @@ import { PAGE_SIZE } from '../conf/constants';
  * get blog list of some user
  * @param {string} userName
  * @param {number} [pageIndex=0]
- * @return {Promise<BaseModel>}
+ * @return {Promise<IResData<any>>}
  */
 export async function getProfileBlogs(
     userName: string,
     pageIndex = 0,
-): Promise<BaseModel> {
+): Promise<IResData<any>> {
     const result = await getBlogsByUser(userName, pageIndex, PAGE_SIZE);
     if (result) {
         const blogList = result.blogs;

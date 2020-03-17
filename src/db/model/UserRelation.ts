@@ -6,6 +6,7 @@ import { Model, BuildOptions, STRING, TINYINT, INTEGER } from 'sequelize';
 import seq from '../seq';
 
 export interface IUserRelation {
+    id?: number;
     userId: number;
     followerId: number;
 }
@@ -24,7 +25,7 @@ export const DefinedUserRelation = <UserRelationModelStatic>seq.define(
             allowNull: false,
             comment: 'the user who is followed',
         },
-        follower: {
+        followerId: {
             type: INTEGER,
             allowNull: false,
             comment: 'the user who is following',

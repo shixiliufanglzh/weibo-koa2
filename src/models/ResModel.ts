@@ -1,4 +1,4 @@
-interface IResData<T> {
+export interface IResData<T> {
     errno: number;
     data: T;
     message: string;
@@ -9,7 +9,7 @@ export interface IErrResData {
     message: string;
 }
 
-export class BaseModel {
+export class BaseModel implements IResData<any> {
     errno: number;
     data: any;
     message: string;
