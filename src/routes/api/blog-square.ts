@@ -3,21 +3,21 @@
  */
 
 import * as Router from 'koa-router';
-import { getProfileBlogs } from '../../controllers/blog-profile';
+import { ExtendedContext } from '../../utils/extends';
 import { loginCheck } from '../../middlewares/loginChecks';
 import { getBlogListStr } from '../../utils/blog';
-import { ExtendedContext } from '../../utils/extends';
+import { getSquareBlogs } from '../../controllers/blog-square';
 const router = new Router();
 
-router.prefix('/api/profile');
+router.prefix('/api/square');
 
 router.get(
-    '/loadMore/:userName/:pageIndex',
+    '/loadMore/:pageIndex',
     loginCheck,
     async (ctx: ExtendedContext, next) => {
-        let { userName, pageIndex } = ctx.params;
+        let { pageIndex } = ctx.params;
         pageIndex = parseInt(pageIndex);
-        const result = await getProfileBlogs(userName, pageIndex);
+        const result = await getSquareBlogs(pageIndex);
         result.data.blogListTpl = getBlogListStr(result.data.blogList);
         ctx.body = result;
     },

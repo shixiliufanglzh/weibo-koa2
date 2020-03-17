@@ -77,3 +77,43 @@ export async function getBlogsByUser(
         blogs: await formatBlog(blogs),
     };
 }
+
+/**
+ * query blog list by user
+ * @param {number} [pageIndex=0]
+ * @param {number} [pageSize=10]
+ * @return {Promise<any>}
+ */
+export async function getBlogsForSquare(
+    pageIndex = 0,
+    pageSize = 10,
+): Promise<{count: number, blogs:IBlog[]}> {
+    const result = await DefinedBlog.findAndCountAll({
+        limit: pageSize,
+        offset: pageSize * pageIndex,
+        order: [
+            ['id', 'DESC'],
+        ],
+        include: [
+            {
+                model: DefinedUser,
+                attributes: ['userName', 'nickName', 'picture'],
+                where: {},
+            },
+        ],
+    });
+    // console.log('blog list of ' + userName, result);
+    const blogs = result.rows
+        .map((blog) => blog.get())
+        .map((blog: IBlog & {user: UserModel}) => {
+            const user = blog.user.get();
+            return {
+                ...blog,
+                user,
+            };
+        });
+    return {
+        count: result.count,
+        blogs: await formatBlog(blogs),
+    };
+}

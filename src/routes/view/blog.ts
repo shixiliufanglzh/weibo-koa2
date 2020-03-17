@@ -7,6 +7,7 @@ import { ExtendedContext } from '../../utils/extends';
 import { loginRedirect } from '../../middlewares/loginChecks';
 import { getProfileBlogs } from '../../controllers/blog-profile';
 import { isExist } from '../../controllers/user';
+import { getSquareBlogs } from '../../controllers/blog-square';
 const router = new Router();
 
 router.get('/', loginRedirect, async (ctx: ExtendedContext, next) => {
@@ -44,6 +45,17 @@ router.get(
                 userInfo: curUserInfo,
                 isMe,
             },
+        });
+    },
+);
+
+router.get(
+    '/square',
+    loginRedirect,
+    async (ctx: ExtendedContext, next) => {
+        const result = await getSquareBlogs(0);
+        await ctx.render('square', {
+            blogData: result.data,
         });
     },
 );

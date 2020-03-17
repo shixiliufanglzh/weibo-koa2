@@ -24,6 +24,7 @@ import userApi from './routes/api/user';
 import blogView from './routes/view/blog';
 import blogHomeApi from './routes/api/blog-home';
 import blogProfileApi from './routes/api/blog-profile';
+import blogSquareApi from './routes/api/blog-square';
 import utilsApi from './routes/api/utils';
 import errorViewRouter from './routes/view/error';
 
@@ -81,6 +82,7 @@ app.use(userApi.routes()).use(userApi.allowedMethods());
 app.use(blogView.routes()).use(blogView.allowedMethods());
 app.use(blogHomeApi.routes()).use(blogHomeApi.allowedMethods());
 app.use(blogProfileApi.routes()).use(blogProfileApi.allowedMethods());
+app.use(blogSquareApi.routes()).use(blogSquareApi.allowedMethods());
 app.use(utilsApi.routes()).use(utilsApi.allowedMethods());
 app.use(errorViewRouter.routes()).use(errorViewRouter.allowedMethods());
 

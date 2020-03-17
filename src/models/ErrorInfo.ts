@@ -74,4 +74,9 @@ export const apiErrInfo = {
         errno: 11002,
         message: '删除微博失败，请重试',
     },
+    // get blog failed
+    getBlogFail: {
+        errno: 11003,
+        message: '获取微博失败，请重试',
+    },
 };

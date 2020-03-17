@@ -31,7 +31,7 @@ export const set = (key: string, val: any, timeout=3600): void => {
  * @param {string} key
  * @return {Promise<string>} promise
  */
-export const get = (key: string): Promise<string> => {
+export const get = (key: string): Promise<any> => {
     const promise: Promise<string> = new Promise((resolve, reject) => {
         redisClient.get(key, (err, val) => {
             if (err) {
