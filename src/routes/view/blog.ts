@@ -45,13 +45,23 @@ router.get(
         const blogResult: IResData<IBlog> =
             await getProfileBlogs(curUserName, 0);
         // 3.get fans data
-        const fansResult = await getFans(curUserInfo.id);
+        const fansData = (await getFans(curUserInfo.id)).data;
+        // 4.get if I followed current user
+        const amIFollowedCurUser = fansData.list.some((user) => {
+            return user.userName === myUserName;
+        });
         // render data
         await ctx.render('profile', {
             userData: {
                 userInfo: curUserInfo,
                 isMe,
-                fansData: fansResult.data,
+                fansData,
+                amIFollowed: amIFollowedCurUser,
+                atCount: 0, // TBD
+                followingData: {
+                    count: 0,
+                    list: [],
+                },
             },
             blogData: blogResult.data,
         });

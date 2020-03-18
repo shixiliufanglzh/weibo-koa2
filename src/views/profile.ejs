@@ -37,8 +37,8 @@
                 <%- include('widgets/user-info', {
                     userInfo: userData.userInfo,
                     isMe: userData.isMe,
-                    // amIFollowed: userData.amIFollowed,
-                    // atCount: userData.atCount
+                    amIFollowed: userData.amIFollowed,
+                    atCount: userData.atCount
                 });%>
             </div>
 
@@ -49,7 +49,10 @@
             })%>
 
             <!-- 关注 -->
-            
+            <%- include('widgets/following', {
+                count: userData.followingData.count,
+                userList: userData.followingData.list
+            })%>
 
         </div> <!-- 右侧结束 -->
     </div>

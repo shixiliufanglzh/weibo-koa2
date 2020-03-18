@@ -8,11 +8,11 @@ import { formatUser } from './_format';
 /**
  * get followers list
  * @param {number} userId
- * @return {Promise<{count: number, userList: IUser[]}>}
+ * @return {Promise<{count: number, list: IUser[]}>}
  */
 export async function getFollowers(
     userId: number,
-): Promise<{count: number, userList: IUser[]}> {
+): Promise<{count: number, list: IUser[]}> {
     const result = await DefinedUser.findAndCountAll({
         attributes: ['id', 'userName', 'nickName', 'picture', 'city'],
         order: [
@@ -28,9 +28,9 @@ export async function getFollowers(
     // if (!result) {
     //     return result;
     // }
-    const userList = formatUser(result.rows.map((row) => row.get()) as IUser[]);
+    const list = formatUser(result.rows.map((row) => row.get()) as IUser[]);
     return {
         count: result.count,
-        userList,
+        list,
     };
 };
