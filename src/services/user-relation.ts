@@ -12,7 +12,7 @@ import { formatUser } from './_format';
  * @param {number} userId
  * @return {Promise<{count: number, list: IUser[]}>}
  */
-export async function getFollowers(
+export async function queryFollowers(
     userId: number,
 ): Promise<{ count: number, list: IUser[] }> {
     const result = await DefinedUser.findAndCountAll({
@@ -27,10 +27,53 @@ export async function getFollowers(
             },
         }],
     });
-    // if (!result) {
-    //     return result;
-    // }
     const list = formatUser(result.rows.map((row) => row.get()) as IUser[]);
+    return {
+        count: result.count,
+        list,
+    };
+};
+
+
+/**
+ * get following list
+ * @param {number} followerId
+ * @return {Promise<{count: number, list: IUser[]}>}
+ */
+export async function queryFollowing(
+    followerId: number,
+): Promise<{ count: number, list: IUser[] }> {
+    const result = await DefinedUserRelation.findAndCountAll({
+        attributes: ['userId', 'followerId'],
+        order: [
+            ['id', 'DESC'],
+        ],
+        include: [{
+            model: DefinedUser,
+            attributes: ['id', 'userName', 'nickName', 'picture', 'city'],
+        }],
+        where: {
+            followerId,
+        },
+    });
+    const list = formatUser(
+        result.rows
+            .map((row) => row.get())
+            .map((row: any) => row.user) as IUser[],
+    );
+    // const result = await DefinedUser.findAndCountAll({
+    //     attributes: ['id', 'userName', 'nickName', 'picture', 'city'],
+    //     order: [
+    //         ['id', 'DESC'],
+    //     ],
+    //     include: [{
+    //         model: DefinedUserRelation,
+    //         where: {
+    //             followerId,
+    //         },
+    //     }],
+    // });
+    // const list = formatUser(result.rows.map((row) => row.get()) as IUser[]);
     return {
         count: result.count,
         list,

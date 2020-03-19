@@ -5,7 +5,9 @@ import { filterXSS } from 'xss';
 import { SuccessModel, ErrorModel, IResData } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
 import { IUser, IUserRelation } from '../db/model';
-import { getFollowers, addFollower, deleteFollower } from '../services/user-relation';
+import {
+    queryFollowers, queryFollowing, addFollower, deleteFollower,
+} from '../services/user-relation';
 
 /**
  *
@@ -14,10 +16,20 @@ import { getFollowers, addFollower, deleteFollower } from '../services/user-rela
  * @param {number} userId
  * @return {Promise<IResData<any>>}
  */
-export async function getFans(
+export async function getFollowers(
     userId: number,
-): Promise<IResData<{count: number, list: IUser[]} | null>> {
-    const result = await getFollowers(userId);
+): Promise<IResData<{ count: number, list: IUser[] } | null>> {
+    const result = await queryFollowers(userId);
+    if (result) {
+        return new SuccessModel(result);
+    }
+    return new ErrorModel(apiErrInfo.getBlogFail);
+}
+
+export async function getFollowing(
+    userId: number,
+): Promise<IResData<{ count: number, list: IUser[] } | null>> {
+    const result = await queryFollowing(userId);
     if (result) {
         return new SuccessModel(result);
     }
