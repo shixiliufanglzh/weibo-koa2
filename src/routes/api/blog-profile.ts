@@ -7,6 +7,7 @@ import { getProfileBlogs } from '../../controllers/blog-profile';
 import { loginCheck } from '../../middlewares/loginChecks';
 import { getBlogListStr } from '../../utils/blog';
 import { ExtendedContext } from '../../utils/extends';
+import { follow, unfollow } from '../../controllers/user-relation';
 const router = new Router();
 
 router.prefix('/api/profile');
@@ -22,6 +23,18 @@ router.get(
         ctx.body = result;
     },
 );
+
+router.post('/follow', loginCheck, async (ctx: ExtendedContext, next) => {
+    const { id: myUserId } = ctx.session.userInfo;
+    const { userId: curUserId } = ctx.request.body;
+    ctx.body = await follow(myUserId, curUserId);
+});
+
+router.post('/unfollow', loginCheck, async (ctx: ExtendedContext, next) => {
+    const { id: myUserId } = ctx.session.userInfo;
+    const { userId: curUserId } = ctx.request.body;
+    ctx.body = await unfollow(myUserId, curUserId);
+});
 
 
 export default router;

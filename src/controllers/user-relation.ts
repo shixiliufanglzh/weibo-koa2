@@ -4,8 +4,8 @@
 import { filterXSS } from 'xss';
 import { SuccessModel, ErrorModel, IResData } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
-import { IUserRelation, IUser } from '../db/model';
-import { getFollowers } from '../services/user-relation';
+import { IUser, IUserRelation } from '../db/model';
+import { getFollowers, addFollower, deleteFollower } from '../services/user-relation';
 
 /**
  *
@@ -22,4 +22,40 @@ export async function getFans(
         return new SuccessModel(result);
     }
     return new ErrorModel(apiErrInfo.getBlogFail);
+}
+
+/**
+ * follow user
+ * @param {number} myUserId
+ * @param {number} curUserId
+ * @return {Promise<IResData<IUserRelation>>}
+ */
+export async function follow(
+    myUserId: number,
+    curUserId: number,
+): Promise<IResData<IUserRelation>> {
+    try {
+        const result = await addFollower(myUserId, curUserId);
+        return new SuccessModel(result);
+    } catch (error) {
+        console.error(error.message, error.stack);
+        return new ErrorModel(apiErrInfo.addFollowerFail);
+    }
+}
+
+/**
+ * unfollow user
+ * @param {number} myUserId
+ * @param {number} curUserId
+ * @return {Promise<IResData<IUserRelation>>}
+ */
+export async function unfollow(
+    myUserId: number,
+    curUserId: number,
+): Promise<IResData<IUserRelation>> {
+    const result = await deleteFollower(myUserId, curUserId);
+    if (result) {
+        return new SuccessModel();
+    }
+    return new ErrorModel(apiErrInfo.deleteFollowerFail);
 }
