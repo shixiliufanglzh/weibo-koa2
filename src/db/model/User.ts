@@ -17,7 +17,7 @@ type UserModelStatic = typeof Model & {
     new (values?: object, options?: BuildOptions): UserModel;
   }
 
-export const DefinedUser = <UserModelStatic>seq.define('user', {
+export const User = <UserModelStatic>seq.define('user', {
     userName: {
         type: STRING,
         allowNull: false,

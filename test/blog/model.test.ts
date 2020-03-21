@@ -1,12 +1,12 @@
 /**
   * @description user model test
   */
-import { DefinedBlog } from "../../src/db/model";
+import { Blog } from "../../src/db/model";
 
 
 test('blog model attributes test', async () => {
     // would not save to db
-    const user = DefinedBlog.build({
+    const user = Blog.build({
         userId: 1,
         content: '123',
         image: '/xxx.png'

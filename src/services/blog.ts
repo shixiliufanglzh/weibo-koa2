@@ -2,7 +2,9 @@
  * @description blog service
  */
 
-import { DefinedUser, DefinedBlog, IBlog, UserModel } from '../db/model/index';
+import {
+    User, Blog, IBlog, UserModel, UserRelation,
+} from '../db/model/index';
 import { formatBlog } from './_format';
 
 
@@ -20,7 +22,7 @@ export async function createBlog({
     content,
     image,
 }: IBlog): Promise<IBlog> {
-    const result = await DefinedBlog.create({
+    const result = await Blog.create({
         userId,
         content,
         image,
@@ -41,14 +43,14 @@ export async function createBlog({
  */
 export async function getBlogsByUser(
     userName: string,
-    pageIndex = 0,
-    pageSize = 10,
-): Promise<{count: number, blogs:IBlog[]}> {
+    pageIndex: number = 0,
+    pageSize: number = 10,
+): Promise<{ count: number, blogs: IBlog[] }> {
     const userWhereOpt: any = {};
     if (userName) {
         userWhereOpt.userName = userName;
     }
-    const result = await DefinedBlog.findAndCountAll({
+    const result = await Blog.findAndCountAll({
         limit: pageSize,
         offset: pageSize * pageIndex,
         order: [
@@ -56,7 +58,7 @@ export async function getBlogsByUser(
         ],
         include: [
             {
-                model: DefinedUser,
+                model: User,
                 attributes: ['userName', 'nickName', 'picture'],
                 where: userWhereOpt,
             },
@@ -65,7 +67,7 @@ export async function getBlogsByUser(
     // console.log('blog list of ' + userName, result);
     const blogs = result.rows
         .map((blog) => blog.get())
-        .map((blog: IBlog & {user: UserModel}) => {
+        .map((blog: IBlog & { user: UserModel }) => {
             const user = blog.user.get();
             return {
                 ...blog,
@@ -79,16 +81,16 @@ export async function getBlogsByUser(
 }
 
 /**
- * query blog list by user
+ * query all blog list
  * @param {number} [pageIndex=0]
  * @param {number} [pageSize=10]
  * @return {Promise<any>}
  */
 export async function getBlogsForSquare(
-    pageIndex = 0,
-    pageSize = 10,
-): Promise<{count: number, blogs:IBlog[]}> {
-    const result = await DefinedBlog.findAndCountAll({
+    pageIndex: number = 0,
+    pageSize: number = 10,
+): Promise<{ count: number, blogs: IBlog[] }> {
+    const result = await Blog.findAndCountAll({
         limit: pageSize,
         offset: pageSize * pageIndex,
         order: [
@@ -96,7 +98,7 @@ export async function getBlogsForSquare(
         ],
         include: [
             {
-                model: DefinedUser,
+                model: User,
                 attributes: ['userName', 'nickName', 'picture'],
                 where: {},
             },
@@ -105,7 +107,57 @@ export async function getBlogsForSquare(
     // console.log('blog list of ' + userName, result);
     const blogs = result.rows
         .map((blog) => blog.get())
-        .map((blog: IBlog & {user: UserModel}) => {
+        .map((blog: IBlog & { user: UserModel }) => {
+            const user = blog.user.get();
+            return {
+                ...blog,
+                user,
+            };
+        });
+    return {
+        count: result.count,
+        blogs: await formatBlog(blogs),
+    };
+}
+
+/**
+ * get blogs of all followers (include self)
+ * @param {number} followerId
+ * @param {number} [pageIndex=0]
+ * @param {number} [pageSize=10]
+ * @return {Promise<{count: number, blogs:IBlog[]}>}
+ */
+export async function getBlogsOfFollowing(
+    followerId: number,
+    pageIndex: number = 0,
+    pageSize: number = 10,
+): Promise<{ count: number, blogs: IBlog[] }> {
+    const userWhereOpt: any = {};
+    if (followerId) {
+        userWhereOpt.followerId = followerId;
+    }
+    const result = await Blog.findAndCountAll({
+        limit: pageSize,
+        offset: pageSize * pageIndex,
+        order: [
+            ['id', 'DESC'],
+        ],
+        include: [
+            {
+                model: User,
+                attributes: ['userName', 'nickName', 'picture'],
+            },
+            {
+                model: UserRelation,
+                attributes: ['userId', 'followerId'],
+                where: userWhereOpt,
+            },
+        ],
+    });
+    // console.log('blog list of ' + userName, result);
+    const blogs = result.rows
+        .map((blog) => blog.get())
+        .map((blog: IBlog & { user: UserModel }) => {
             const user = blog.user.get();
             return {
                 ...blog,

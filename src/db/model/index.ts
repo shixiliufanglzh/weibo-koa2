@@ -1,31 +1,31 @@
-import { IUser, DefinedUser, UserModel } from './User';
-import { IBlog, DefinedBlog, BlogModel } from './Blog';
+import { IUser, User, UserModel } from './User';
+import { IBlog, Blog, BlogModel } from './Blog';
 import {
-    IUserRelation, DefinedUserRelation, UserRelationModel,
+    IUserRelation, UserRelation, UserRelationModel,
 } from './UserRelation';
 
-DefinedBlog.belongsTo(DefinedUser, {
+Blog.belongsTo(User, {
     foreignKey: 'userId',
 });
-DefinedUser.hasMany(DefinedUserRelation, {
+User.hasMany(UserRelation, {
     foreignKey: 'followerId',
 });
-DefinedUserRelation.belongsTo(DefinedUser, {
+UserRelation.belongsTo(User, {
     foreignKey: 'userId',
 });
-DefinedBlog.belongsTo(DefinedUserRelation, {
+Blog.belongsTo(UserRelation, {
     foreignKey: 'userId',
     targetKey: 'userId',
 });
 
 export {
     IUser,
-    DefinedUser,
+    User,
     UserModel,
     IUserRelation,
-    DefinedUserRelation,
+    UserRelation,
     UserRelationModel,
     IBlog,
-    DefinedBlog,
+    Blog,
     BlogModel,
 };

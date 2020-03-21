@@ -2,9 +2,10 @@
  * @description user service
  */
 
-import { DefinedUser, IUser } from '../db/model/index';
+import { User, IUser } from '../db/model/index';
 import { formatUser } from './_format';
 import { addFollower } from './user-relation';
+import { DEFAULT_AVATOR } from '../conf/constants';
 
 /**
  * @param {string} userName
@@ -18,7 +19,7 @@ export async function getUserInfo(
     if (password) {
         Object.assign(whereOpt, { password });
     }
-    const result = await DefinedUser.findOne({
+    const result = await User.findOne({
         attributes: ['id', 'userName', 'nickName', 'picture', 'city'],
         where: whereOpt,
     });
@@ -39,11 +40,12 @@ export async function createUser({
     gender,
     nickName,
 }: IUser): Promise<IUser> {
-    const result = await DefinedUser.create({
+    const result = await User.create({
         userName,
         password,
         gender: gender || 3,
         nickName: nickName || userName,
+        picture: DEFAULT_AVATOR,
     });
     // console.log(result);
     if (!result) {
@@ -55,7 +57,7 @@ export async function createUser({
 }
 
 export async function deleteUser(userName: string): Promise<boolean> {
-    const result = await DefinedUser.destroy({
+    const result = await User.destroy({
         where: {
             userName,
         },
@@ -92,7 +94,7 @@ export async function updateUser(
     if (userInfoForAuth.password) {
         whereData.password = userInfoForAuth.password;
     }
-    const result = await DefinedUser.update(updateData, {
+    const result = await User.update(updateData, {
         where: whereData,
     });
     return result[0] > 0;

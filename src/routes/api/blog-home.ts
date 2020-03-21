@@ -11,7 +11,8 @@ import { genValidator } from '../../middlewares/validator';
 import blogValidate from '../../validators/blog';
 import { isTest } from '../../utils/env';
 import { loginCheck } from '../../middlewares/loginChecks';
-import { create } from '../../controllers/blog-home';
+import { create, getHomeBlogs } from '../../controllers/blog-home';
+import { getBlogListStr } from '../../utils/blog';
 const router = new Router();
 
 router.prefix('/api/blog');
@@ -24,6 +25,18 @@ router.post(
         const { content, image } = ctx.request.body;
         const { id } = ctx.session.userInfo;
         ctx.body = await create(id, content, image);
+    },
+);
+
+router.get(
+    '/loadMore/:pageIndex',
+    loginCheck,
+    async (ctx: ExtendedContext, next) => {
+        let { pageIndex } = ctx.params;
+        pageIndex = parseInt(pageIndex);
+        const result = await getHomeBlogs(ctx.session.userInfo.id, pageIndex);
+        result.data.blogListTpl = getBlogListStr(result.data.blogList);
+        ctx.body = result;
     },
 );
 
