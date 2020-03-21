@@ -17,7 +17,7 @@ type BlogModelStatic = typeof Model & {
     new (values?: object, options?: BuildOptions): BlogModel;
   }
 
-export const DefinedBlog = <BlogModelStatic>seq.define('blog', {
+export const Blog = <BlogModelStatic>seq.define('blog', {
     userId: {
         type: INTEGER,
         allowNull: false,

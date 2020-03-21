@@ -11,6 +11,7 @@ import { genValidator } from '../../middlewares/validator';
 import userValidate from '../../validators/user';
 import { isTest } from '../../utils/env';
 import { loginCheck } from '../../middlewares/loginChecks';
+import { unfollow } from '../../controllers/user-relation';
 const router = new Router();
 
 router.prefix('/api/user');
@@ -36,6 +37,7 @@ router.post(
     '/delete',
     loginCheck,
     async (ctx: ExtendedContext, next) => {
+        await unfollow(ctx.session.userInfo.id, ctx.session.userInfo.id);
         if (isTest) {
             // test env - delete test account
             const { userName } = ctx.session.userInfo;

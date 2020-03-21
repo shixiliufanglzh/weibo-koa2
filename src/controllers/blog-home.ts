@@ -2,9 +2,10 @@
  * @description user controller
  */
 import { filterXSS } from 'xss';
-import { BaseModel, SuccessModel, ErrorModel } from '../models/ResModel';
+import { SuccessModel, ErrorModel, IResData } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
-import { createBlog } from '../services/blog';
+import { createBlog, getBlogsOfFollowing } from '../services/blog';
+import { PAGE_SIZE } from '../conf/constants';
 
 /**
  * create blog of some user
@@ -17,7 +18,7 @@ export async function create(
     userId: number,
     content: string,
     image: string,
-): Promise<BaseModel> {
+): Promise<IResData<any>> {
     try {
         const blog = await createBlog({
             userId,
@@ -29,4 +30,22 @@ export async function create(
         console.error(error.message, error.stack);
         return new ErrorModel(apiErrInfo.createBlogFail);
     }
+}
+
+export async function getHomeBlogs(
+    userId: number,
+    pageIndex: number = 0,
+): Promise<IResData<any>> {
+    const result = await getBlogsOfFollowing(userId, pageIndex, PAGE_SIZE);
+    if (result) {
+        const blogList = result.blogs;
+        return new SuccessModel({
+            isEmpty: blogList.length <= 0,
+            count: result.count,
+            pageSize: PAGE_SIZE,
+            pageIndex,
+            blogList,
+        });
+    }
+    return new ErrorModel(apiErrInfo.getBlogFail);
 }

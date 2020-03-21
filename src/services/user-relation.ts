@@ -1,7 +1,8 @@
 import {
-    IUser, DefinedUser, DefinedUserRelation, IUserRelation,
+    IUser, User, UserRelation, IUserRelation,
 } from '../db/model';
 import { formatUser } from './_format';
+import { Op } from 'sequelize';
 
 /**
  * @description user relation service
@@ -15,15 +16,18 @@ import { formatUser } from './_format';
 export async function queryFollowers(
     userId: number,
 ): Promise<{ count: number, list: IUser[] }> {
-    const result = await DefinedUser.findAndCountAll({
+    const result = await User.findAndCountAll({
         attributes: ['id', 'userName', 'nickName', 'picture', 'city'],
         order: [
             ['id', 'DESC'],
         ],
         include: [{
-            model: DefinedUserRelation,
+            model: UserRelation,
             where: {
                 userId,
+                followerId: {
+                    [Op.ne]: userId,
+                },
             },
         }],
     });
@@ -43,17 +47,20 @@ export async function queryFollowers(
 export async function queryFollowing(
     followerId: number,
 ): Promise<{ count: number, list: IUser[] }> {
-    const result = await DefinedUserRelation.findAndCountAll({
+    const result = await UserRelation.findAndCountAll({
         attributes: ['userId', 'followerId'],
         order: [
             ['id', 'DESC'],
         ],
         include: [{
-            model: DefinedUser,
+            model: User,
             attributes: ['id', 'userName', 'nickName', 'picture', 'city'],
         }],
         where: {
             followerId,
+            userId: {
+                [Op.ne]: followerId,
+            },
         },
     });
     const list = formatUser(
@@ -61,13 +68,13 @@ export async function queryFollowing(
             .map((row) => row.get())
             .map((row: any) => row.user) as IUser[],
     );
-    // const result = await DefinedUser.findAndCountAll({
+    // const result = await User.findAndCountAll({
     //     attributes: ['id', 'userName', 'nickName', 'picture', 'city'],
     //     order: [
     //         ['id', 'DESC'],
     //     ],
     //     include: [{
-    //         model: DefinedUserRelation,
+    //         model: UserRelation,
     //         where: {
     //             followerId,
     //         },
@@ -90,7 +97,7 @@ export async function addFollower(
     followerId: number,
     targetUserId: number,
 ): Promise<IUserRelation> {
-    const result = await DefinedUserRelation.create({
+    const result = await UserRelation.create({
         userId: targetUserId,
         followerId,
     });
@@ -110,7 +117,7 @@ export async function deleteFollower(
     followerId: number,
     targetUserId: number,
 ): Promise<boolean> {
-    const result = await DefinedUserRelation.destroy({
+    const result = await UserRelation.destroy({
         where: {
             userId: targetUserId,
             followerId,

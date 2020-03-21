@@ -1,4 +1,4 @@
-import { DefinedUser } from "../../src/db/model";
+import { User } from "../../src/db/model";
 
  /**
   * @description user model test
@@ -6,7 +6,7 @@ import { DefinedUser } from "../../src/db/model";
 
 test('user model attributes test', async () => {
     // would not save to db
-    const user = DefinedUser.build({
+    const user = User.build({
         userName: 'zhangsan',
         password: '123',
         nickName: '张三',

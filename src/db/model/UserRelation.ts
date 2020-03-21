@@ -17,7 +17,7 @@ type UserRelationModelStatic = typeof Model & {
     new (values?: object, options?: BuildOptions): UserRelationModel;
   }
 
-export const DefinedUserRelation = <UserRelationModelStatic>seq.define(
+export const UserRelation = <UserRelationModelStatic>seq.define(
     'userRelation',
     {
         userId: {

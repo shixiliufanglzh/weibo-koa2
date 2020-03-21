@@ -4,7 +4,7 @@
 import { filterXSS } from 'xss';
 import { SuccessModel, ErrorModel, IResData } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
-import { getBlogsByUser } from '../services/blog';
+import { getBlogsByUser, getBlogsOfFollowing } from '../services/blog';
 import { PAGE_SIZE } from '../conf/constants';
 
 /**
@@ -17,7 +17,7 @@ import { PAGE_SIZE } from '../conf/constants';
  */
 export async function getProfileBlogs(
     userName: string,
-    pageIndex = 0,
+    pageIndex: number = 0,
 ): Promise<IResData<any>> {
     const result = await getBlogsByUser(userName, pageIndex, PAGE_SIZE);
     if (result) {
