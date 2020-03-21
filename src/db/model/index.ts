@@ -13,6 +13,10 @@ DefinedUser.hasMany(DefinedUserRelation, {
 DefinedUserRelation.belongsTo(DefinedUser, {
     foreignKey: 'userId',
 });
+DefinedBlog.belongsTo(DefinedUserRelation, {
+    foreignKey: 'userId',
+    targetKey: 'userId',
+});
 
 export {
     IUser,

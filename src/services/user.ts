@@ -4,6 +4,7 @@
 
 import { DefinedUser, IUser } from '../db/model/index';
 import { formatUser } from './_format';
+import { addFollower } from './user-relation';
 
 /**
  * @param {string} userName
@@ -48,7 +49,9 @@ export async function createUser({
     if (!result) {
         return result;
     }
-    return result.get() as IUser;
+    const user = result.get() as IUser;
+    addFollower(user.id, user.id);
+    return user;
 }
 
 export async function deleteUser(userName: string): Promise<boolean> {
