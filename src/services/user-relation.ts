@@ -2,6 +2,7 @@ import {
     IUser, DefinedUser, DefinedUserRelation, IUserRelation,
 } from '../db/model';
 import { formatUser } from './_format';
+import { Op } from 'sequelize';
 
 /**
  * @description user relation service
@@ -24,6 +25,9 @@ export async function queryFollowers(
             model: DefinedUserRelation,
             where: {
                 userId,
+                followerId: {
+                    [Op.ne]: userId,
+                },
             },
         }],
     });
@@ -54,6 +58,9 @@ export async function queryFollowing(
         }],
         where: {
             followerId,
+            userId: {
+                [Op.ne]: followerId,
+            },
         },
     });
     const list = formatUser(
