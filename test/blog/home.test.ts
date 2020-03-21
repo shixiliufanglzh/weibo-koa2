@@ -97,6 +97,20 @@ test('load first page of blogs in square', async () => {
     expect(data).toHaveProperty('blogList');
 })
 
+// load first page of blogs in home page
+test('load first page of blogs in home page', async () => {
+    const res = await server
+        .get(`/api/blog/loadMore/0`)
+        .set('cookie', COOKIE);
+    expect(res.body.errno).toBe(0);
+    const data = res.body.data;
+    expect(data).toHaveProperty('isEmpty');
+    expect(data).toHaveProperty('count');
+    expect(data).toHaveProperty('pageSize');
+    expect(data).toHaveProperty('pageIndex');
+    expect(data).toHaveProperty('blogList');
+})
+
 // test delete user
 // test('delete user test', async () => {
 //     const res = await server
