@@ -3,7 +3,9 @@
  */
 import { apiErrInfo } from '../models/ErrorInfo';
 import { ErrorModel, IResData, SuccessModel } from '../models/ResModel';
-import { getAtRelationCount, getBlogsByMentionUser } from '../services/at-relation';
+import {
+    getAtRelationCount, getBlogsByMentionUser,
+} from '../services/at-relation';
 import { PAGE_SIZE } from '../conf/constants';
 
 export async function getAtMeCount(

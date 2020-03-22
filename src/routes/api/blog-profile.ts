@@ -1,5 +1,5 @@
 /**
- * @description user api - `register`,`login`, `isExist`
+ * @description blog profile api
  */
 
 import * as Router from 'koa-router';

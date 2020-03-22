@@ -95,7 +95,7 @@ export async function getBlogsByMentionUser(
                 atRelations,
             };
         });
-    console.log('at me blogs', result.count, blogs);
+    // console.log('at me blogs', result.count, blogs);
     return {
         count: result.count,
         blogs: await formatBlog(blogs),

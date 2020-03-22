@@ -1,23 +1,24 @@
 /**
- * @description blog square api
+ * @description blog `AtMe` api
  */
 
 import * as Router from 'koa-router';
-import { ExtendedContext } from '../../utils/extends';
+import { getAtMeBlogs } from '../../controllers/blog-at';
 import { loginCheck } from '../../middlewares/loginChecks';
 import { getBlogListStr } from '../../utils/blog';
-import { getSquareBlogs } from '../../controllers/blog-square';
+import { ExtendedContext } from '../../utils/extends';
 const router = new Router();
 
-router.prefix('/api/square');
+router.prefix('/api/atMe');
 
 router.get(
     '/loadMore/:pageIndex',
     loginCheck,
     async (ctx: ExtendedContext, next) => {
+        const userId = ctx.session.userInfo.id;
         let { pageIndex } = ctx.params;
         pageIndex = parseInt(pageIndex);
-        const result = await getSquareBlogs(pageIndex);
+        const result = await getAtMeBlogs(userId, pageIndex);
         result.data.blogListTpl = getBlogListStr(result.data.blogList);
         ctx.body = result;
     },
