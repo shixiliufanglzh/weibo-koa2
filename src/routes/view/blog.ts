@@ -11,7 +11,7 @@ import { isExist } from '../../controllers/user';
 import { getSquareBlogs } from '../../controllers/blog-square';
 import { IUser, IBlog } from '../../db/model';
 import { getFollowers, getFollowing } from '../../controllers/user-relation';
-import { getAtMeCount } from '../../controllers/blog-at';
+import { getAtMeCount, getAtMeBlogs } from '../../controllers/blog-at';
 const router = new Router();
 
 router.get('/', loginRedirect, async (ctx: ExtendedContext, next) => {
@@ -78,6 +78,23 @@ router.get(
         await ctx.render('square', {
             blogData: result.data,
         });
+    },
+);
+
+router.get(
+    '/at-me',
+    loginRedirect,
+    async (ctx: ExtendedContext, next) => {
+        const userId = ctx.session.userInfo.id;
+        // 1. get atCount
+        const atCount = (await getAtMeCount(userId)).data;
+        // 2. get first page data
+        const blogData = (await getAtMeBlogs(userId, 0)).data;
+        await ctx.render('atMe', {
+            atCount,
+            blogData,
+        });
+        // 3. mark as read
     },
 );
 
