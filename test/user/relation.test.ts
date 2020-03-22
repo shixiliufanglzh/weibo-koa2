@@ -3,7 +3,7 @@
  */
 
 import server from '../server';
-import { IUser } from '../../src/db/model';
+import { IUser, IBlog } from '../../src/db/model';
 import { getFollowers, getFollowing } from '../../src/controllers/user-relation';
 
 
@@ -85,8 +85,27 @@ test('get `at` list of user(testUser_1)', async () => {
     expect(hasUserName).toBeTruthy();
 })
 
+const testBlog = {
+    userId: 1,
+    content: `c_${Date.now()} @${testUser_2.nickName} - ${testUser_2.userName}`,
+    image: `i_${Date.now()}.png`,
+}
+
+let BLOG_ID: number = null;
+// testUser_1 create blog @testUser_2
+test('testUser_1 create blog and @testUser_2', async () => {
+    const res = await server
+        .post('/api/blog/create')
+        .send(testBlog)
+        .set('cookie', COOKIE);
+    expect(res.body.errno).toBe(0);
+    expect(res.body.data.content).toBe(testBlog.content);
+    expect(res.body.data.image).toBe(testBlog.image);
+    BLOG_ID = res.body.data.id as number;
+})
+
 // testUser_1 unfollow testUser_2
-test('user(testUser_1) follow user(testUser_2)', async () => {
+test('user(testUser_1) unfollow user(testUser_2)', async () => {
     const res = await server
         .post('/api/profile/unfollow')
         .send({userId: testUser_2.id})
@@ -97,12 +116,12 @@ test('user(testUser_1) follow user(testUser_2)', async () => {
 //===========================================
 // remove user testUser_1
 // delete testUser_1
-test('delete user testUser_1', async () => {
-    const res = await server
-        .post('/api/user/delete')
-        .set('cookie', COOKIE);
-    expect(res.body.errno).toBe(0);
-})
+// test('delete user testUser_1', async () => {
+//     const res = await server
+//         .post('/api/user/delete')
+//         .set('cookie', COOKIE);
+//     expect(res.body.errno).toBe(0);
+// })
 
 // log out testUser_1
 test('log out testUser_1', async () => {
@@ -113,8 +132,7 @@ test('log out testUser_1', async () => {
 })
 
 
-//===========================================
-// remove user testUser_2
+//=========================================== switch user
 // login testUser_2
 test('login user testUser_2', async () => {
     const res = await server
@@ -127,13 +145,28 @@ test('login user testUser_2', async () => {
     COOKIE = res.header['set-cookie'].join(';')
 })
 
-// delete testUser_2
-test('delete user testUser_2', async () => {
+// load first page of atMe
+test('load first page of blogs that `at` me', async () => {
     const res = await server
-        .post('/api/user/delete')
+        .get(`/api/atMe/loadMore/0`)
         .set('cookie', COOKIE);
     expect(res.body.errno).toBe(0);
+    const data = res.body.data;
+    const haveCurBlog = data.blogList.some((blog: IBlog) => blog.id === BLOG_ID)
+    expect(data).toHaveProperty('isEmpty');
+    expect(data).toHaveProperty('count');
+    expect(data).toHaveProperty('pageSize');
+    expect(data).toHaveProperty('pageIndex');
+    expect(data).toHaveProperty('blogList');
 })
+
+// delete testUser_2
+// test('delete user testUser_2', async () => {
+//     const res = await server
+//         .post('/api/user/delete')
+//         .set('cookie', COOKIE);
+//     expect(res.body.errno).toBe(0);
+// })
 
 // log out testUser_2
 test('log out testUser_2', async () => {
