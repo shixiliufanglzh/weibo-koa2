@@ -3,6 +3,9 @@ import { IBlog, Blog, BlogModel } from './Blog';
 import {
     IUserRelation, UserRelation, UserRelationModel,
 } from './UserRelation';
+import {
+    IAtRelation, AtRelation, AtRelationModel,
+} from './AtRelation';
 
 Blog.belongsTo(User, {
     foreignKey: 'userId',
@@ -17,6 +20,9 @@ Blog.belongsTo(UserRelation, {
     foreignKey: 'userId',
     targetKey: 'userId',
 });
+Blog.hasMany(AtRelation, {
+    foreignKey: 'blogId',
+});
 
 export {
     IUser,
@@ -28,4 +34,7 @@ export {
     IBlog,
     Blog,
     BlogModel,
+    IAtRelation,
+    AtRelation,
+    AtRelationModel,
 };
