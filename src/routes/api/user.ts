@@ -11,7 +11,7 @@ import { genValidator } from '../../middlewares/validator';
 import userValidate from '../../validators/user';
 import { isTest } from '../../utils/env';
 import { loginCheck } from '../../middlewares/loginChecks';
-import { unfollow } from '../../controllers/user-relation';
+import { unfollow, getFollowing } from '../../controllers/user-relation';
 const router = new Router();
 
 router.prefix('/api/user');
@@ -84,6 +84,14 @@ router.post(
         ctx.body = await logout(ctx);
     },
 );
+
+router.get('/getAtList', loginCheck, async (ctx: ExtendedContext, next) => {
+    const result = await getFollowing(ctx.session.userInfo.id);
+    ctx.body = result.data.list.map((user) => {
+        return `${user.nickName}`;
+        // return `${user.nickName} - ${user.userName}`;
+    });
+});
 
 
 export default router;
