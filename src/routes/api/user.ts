@@ -88,8 +88,8 @@ router.post(
 router.get('/getAtList', loginCheck, async (ctx: ExtendedContext, next) => {
     const result = await getFollowing(ctx.session.userInfo.id);
     ctx.body = result.data.list.map((user) => {
-        return `${user.nickName}`;
-        // return `${user.nickName} - ${user.userName}`;
+        // return `${user.nickName}`;
+        return `${user.nickName} - ${user.userName}`;
     });
 });
 

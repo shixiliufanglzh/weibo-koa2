@@ -74,6 +74,17 @@ test('get following of user(testUser_1)', async () => {
     expect(hasSpeFollowing).toBe(true);
 })
 
+// get `at` list of testUser_1
+test('get `at` list of user(testUser_1)', async () => {
+    const res = await server
+        .get('/api/user/getAtList')
+        .set('cookie', COOKIE);
+    const hasUserName = res.body.some((item: string) => {
+        return item.indexOf(`- ${testUser_2.userName}`) > 0
+    })
+    expect(hasUserName).toBeTruthy();
+})
+
 // testUser_1 unfollow testUser_2
 test('user(testUser_1) follow user(testUser_2)', async () => {
     const res = await server
