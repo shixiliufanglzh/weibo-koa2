@@ -4,7 +4,7 @@
 import { apiErrInfo } from '../models/ErrorInfo';
 import { ErrorModel, IResData, SuccessModel } from '../models/ResModel';
 import {
-    getAtRelationCount, getBlogsByMentionUser,
+    getAtRelationCount, getBlogsByMentionUser, updateAtRelation,
 } from '../services/at-relation';
 import { PAGE_SIZE } from '../conf/constants';
 
@@ -12,7 +12,7 @@ export async function getAtMeCount(
     userId: number,
 ): Promise<IResData<any>> {
     const result = await getAtRelationCount(userId);
-    if (result) {
+    if (result || result === 0) {
         return new SuccessModel(result);
     }
     return new ErrorModel(apiErrInfo.getBlogFail);
@@ -34,4 +34,18 @@ export async function getAtMeBlogs(
         });
     }
     return new ErrorModel(apiErrInfo.getBlogFail);
+}
+
+
+export async function markAsRead(
+    userId: number,
+): Promise<void> {
+    try {
+        await updateAtRelation(
+            { isRead: true },
+            { userId, isRead: false },
+        );
+    } catch (error) {
+        console.error(error);
+    }
 }

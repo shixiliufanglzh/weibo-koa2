@@ -15,7 +15,9 @@ export class BaseModel implements IResData<any> {
     message: string;
     constructor(resData: IResData<any>) {
         this.errno = resData.errno;
-        this.data = resData.data || null;
+        this.data = resData.data ?
+            resData.data :
+            (resData.data === 0 ? resData.data : null);
         this.message = resData.message || '';
     }
 }

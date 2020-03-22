@@ -11,7 +11,9 @@ import { isExist } from '../../controllers/user';
 import { getSquareBlogs } from '../../controllers/blog-square';
 import { IUser, IBlog } from '../../db/model';
 import { getFollowers, getFollowing } from '../../controllers/user-relation';
-import { getAtMeCount, getAtMeBlogs } from '../../controllers/blog-at';
+import {
+    getAtMeCount, getAtMeBlogs, markAsRead,
+} from '../../controllers/blog-at';
 const router = new Router();
 
 router.get('/', loginRedirect, async (ctx: ExtendedContext, next) => {
@@ -62,7 +64,7 @@ router.get(
                 isMe,
                 fansData,
                 amIFollowed: amIFollowedCurUser,
-                atCount, // TBD
+                atCount,
                 followingData,
             },
             blogData: blogResult.data,
@@ -95,6 +97,9 @@ router.get(
             blogData,
         });
         // 3. mark as read
+        if (atCount > 0) {
+            await markAsRead(userId);
+        }
     },
 );
 

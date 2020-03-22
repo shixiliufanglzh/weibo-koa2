@@ -7,9 +7,9 @@ import seq from '../seq';
 
 export interface IAtRelation {
     id?: number;
-    userId: number;
-    blogId: number;
-    isRead: boolean;
+    userId?: number;
+    blogId?: number;
+    isRead?: boolean;
 }
 
 export interface AtRelationModel extends IAtRelation, Model {};

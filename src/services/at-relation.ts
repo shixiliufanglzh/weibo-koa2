@@ -102,6 +102,23 @@ export async function getBlogsByMentionUser(
     };
 };
 
+/**
+ * updata at relation
+ * @param {IAtRelation} target
+ * @param {IAtRelation} condition
+ * @return {Promise<boolean>}
+ */
+export async function updateAtRelation(
+    target: IAtRelation,
+    condition: IAtRelation,
+): Promise<boolean> {
+    const result = await AtRelation.update(target, {
+        where: {
+            ...condition,
+        },
+    });
+    return result[0] > 0;
+};
 // export async function deleteFollower(
 //     followerId: number,
 //     targetUserId: number,

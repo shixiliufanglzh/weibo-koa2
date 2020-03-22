@@ -24,12 +24,13 @@ router.get(
         const followingData = (await getFollowing(myUserInfo.id)).data;
         // 6. get `atMe` count
         const atCount = (await getAtMeCount(myUserInfo.id)).data;
+        console.log('count :::::::::::', atCount);
         // render data
         await ctx.render('index', {
             userData: {
                 userInfo: myUserInfo,
                 fansData,
-                atCount, // TBD
+                atCount,
                 followingData,
             },
             blogData: blogResult.data,
