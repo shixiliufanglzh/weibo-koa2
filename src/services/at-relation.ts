@@ -29,6 +29,23 @@ export async function createAtRelation(
     return result.get() as IAtRelation;
 };
 
+/**
+ * get the count of `at` of some user
+ * @param {number} userId
+ * @return {Promise<number>}
+ */
+export async function getAtRelationCount(
+    userId: number,
+): Promise<number> {
+    const result = await AtRelation.findAndCountAll({
+        where: {
+            userId,
+            isRead: false,
+        },
+    });
+    return result.count;
+};
+
 // export async function deleteFollower(
 //     followerId: number,
 //     targetUserId: number,

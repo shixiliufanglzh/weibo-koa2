@@ -5,6 +5,7 @@ import { IUser, IBlog } from '../db/model';
 import { IResData } from '../models/ResModel';
 import { getFollowers, getFollowing } from '../controllers/user-relation';
 import { getHomeBlogs } from '../controllers/blog-home';
+import { getAtMeCount } from '../controllers/blog-at';
 const router = new Router();
 
 router.get(
@@ -21,12 +22,14 @@ router.get(
         const fansData = (await getFollowers(myUserInfo.id)).data;
         // 5. get following data
         const followingData = (await getFollowing(myUserInfo.id)).data;
+        // 6. get `atMe` count
+        const atCount = (await getAtMeCount(myUserInfo.id)).data;
         // render data
         await ctx.render('index', {
             userData: {
                 userInfo: myUserInfo,
                 fansData,
-                atCount: 0, // TBD
+                atCount, // TBD
                 followingData,
             },
             blogData: blogResult.data,

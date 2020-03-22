@@ -11,6 +11,7 @@ import { isExist } from '../../controllers/user';
 import { getSquareBlogs } from '../../controllers/blog-square';
 import { IUser, IBlog } from '../../db/model';
 import { getFollowers, getFollowing } from '../../controllers/user-relation';
+import { getAtMeCount } from '../../controllers/blog-at';
 const router = new Router();
 
 router.get('/', loginRedirect, async (ctx: ExtendedContext, next) => {
@@ -52,6 +53,8 @@ router.get(
         });
         // 5. get following data
         const followingData = (await getFollowing(curUserInfo.id)).data;
+        // 6. get `atMe` count
+        const atCount = (await getAtMeCount(curUserInfo.id)).data;
         // render data
         await ctx.render('profile', {
             userData: {
@@ -59,7 +62,7 @@ router.get(
                 isMe,
                 fansData,
                 amIFollowed: amIFollowedCurUser,
-                atCount: 0, // TBD
+                atCount, // TBD
                 followingData,
             },
             blogData: blogResult.data,
