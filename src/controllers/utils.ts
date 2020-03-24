@@ -3,7 +3,6 @@
  */
 import { BaseModel, SuccessModel, ErrorModel } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
-import { ExtendedContext } from '../utils/extends';
 import { remove, move, pathExists, ensureDir } from 'fs-extra';
 import { join } from 'path';
 

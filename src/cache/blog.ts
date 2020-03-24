@@ -23,6 +23,6 @@ export const getSquareCachedBlogs = async (
         };
     }
     const result = await getBlogsForSquare(pageIndex, pageSize);
-    set(key, result, 60);
+    set(key, result, 20);
     return result;
 };
