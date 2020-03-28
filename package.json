@@ -6,6 +6,7 @@
     "start": "node src/bin/www",
     "dev": "cross-env NODE_ENV=dev ./node_modules/.bin/nodemon src/bin/www.ts",
     "prd": "cross-env NODE_ENV=production pm2 start pm2.config.json",
+    "sync": "cross-env NODE_ENV=production node dist/db/sync.js",
     "test": "cross-env NODE_ENV=test jest --runInBand --forceExit --colors",
     "test-c": "cross-env NODE_ENV=test jest --coverage --runInBand --forceExit --colors",
     "build": "tsc",
