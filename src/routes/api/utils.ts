@@ -8,6 +8,7 @@ import * as Router from 'koa-router';
 const koaForm: any = require('formidable-upload-koa');
 import { loginCheck } from '../../middlewares/loginChecks';
 import { saveFile } from '../../controllers/utils';
+import { TARGET_OSS_FOLDER } from '../../conf/constants';
 const router = new Router();
 
 // const options = {
@@ -18,13 +19,29 @@ const router = new Router();
 router.prefix('/api/utils');
 
 // upload picture
-router.post('/upload', loginCheck, koaForm(), async (ctx, next) => {
+router.post('/uploadAvatar', loginCheck, koaForm(), async (ctx, next) => {
     const file = (ctx.req as any).files['file'];
     if (!file) {
         return;
     }
     const { size, path, name, type } = file;
-    ctx.body = await saveFile({ size, path, name, type });
+    ctx.body = await saveFile(
+        TARGET_OSS_FOLDER.avatar,
+        { size, path, name, type },
+    );
+});
+
+// upload blog picture
+router.post('/addBlogPicture', loginCheck, koaForm(), async (ctx, next) => {
+    const file = (ctx.req as any).files['file'];
+    if (!file) {
+        return;
+    }
+    const { size, path, name, type } = file;
+    ctx.body = await saveFile(
+        TARGET_OSS_FOLDER.blog,
+        { size, path, name, type },
+    );
 });
 
 export default router;

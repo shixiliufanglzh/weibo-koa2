@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DEFAULT_AVATOR, REG_FOR_AT_WHO } from '../conf/constants';
+import { DEFAULT_AVATAR, REG_FOR_AT_WHO } from '../conf/constants';
 import { IUser, IBlog } from '../db/model';
 import { timeFormat } from '../utils/dt';
 
@@ -11,7 +11,7 @@ import { timeFormat } from '../utils/dt';
  */
 function _formateUserPicture(user: IUser): IUser {
     if (!user.picture) {
-        user.picture = DEFAULT_AVATOR;
+        user.picture = DEFAULT_AVATAR;
     }
     return user;
 }

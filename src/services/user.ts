@@ -5,7 +5,7 @@
 import { User, IUser } from '../db/model/index';
 import { formatUser } from './_format';
 import { addFollower } from './user-relation';
-import { DEFAULT_AVATOR } from '../conf/constants';
+import { DEFAULT_AVATAR } from '../conf/constants';
 
 /**
  * @param {string} userName
@@ -45,7 +45,7 @@ export async function createUser({
         password,
         gender: gender || 3,
         nickName: nickName || userName,
-        picture: DEFAULT_AVATOR,
+        picture: DEFAULT_AVATAR,
     });
     // console.log(result);
     if (!result) {

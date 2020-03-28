@@ -5,6 +5,8 @@ import { BaseModel, SuccessModel, ErrorModel } from '../models/ResModel';
 import { apiErrInfo } from '../models/ErrorInfo';
 import { remove, move, pathExists, ensureDir } from 'fs-extra';
 import { join } from 'path';
+import { put } from '../utils/picture-upload';
+import { TARGET_OSS_FOLDER, WATERMARK_PREFIX } from '../conf/constants';
 
 // the target folder path to save uploaded file
 const DIST_FOLDER_PATH = join(__dirname, '../../uploadFiles');
@@ -19,6 +21,7 @@ pathExists(DIST_FOLDER_PATH).then((isExist) => {
 
 /**
  * save file
+ * @param {string} targetOssFolder
  * @param {number} size
  * @param {string} path
  * @param {string} name
@@ -26,6 +29,7 @@ pathExists(DIST_FOLDER_PATH).then((isExist) => {
  * @return {Promise<BaseModel>}
  */
 export async function saveFile(
+    targetOssFolder: string,
     { size, path, name, type }: {
         size: number,
         path: string,
@@ -37,10 +41,16 @@ export async function saveFile(
         remove(path);
         return new ErrorModel(apiErrInfo.uploadFileSizeFail);
     }
-    const fileName = `${Date.now()}.${name}`;
-    const destFilePath = join(DIST_FOLDER_PATH, fileName);
-    move(path, destFilePath);
+    const fileName = `${targetOssFolder}${Date.now()}.${name}`;
+    // const destFilePath = join(DIST_FOLDER_PATH, fileName);
+    // move(path, destFilePath);
+    let picUrl = await put(fileName, path);
+    if (targetOssFolder === TARGET_OSS_FOLDER.blog) {
+        picUrl += WATERMARK_PREFIX;
+    }
+    remove(path);
     return new SuccessModel({
-        url: '/' + fileName,
+        url: picUrl,
+        // url: '/' + fileName,
     });
 };
