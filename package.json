@@ -15,7 +15,7 @@
     "inspect": "nodemon --inspect=9229 dist/bin/www.js"
   },
   "dependencies": {
-    "ajv": "^6.12.0",
+    "ajv": "^6.12.3",
     "connect-redis": "^4.0.4",
     "date-fns": "^2.10.0",
     "debug": "^4.1.1",
